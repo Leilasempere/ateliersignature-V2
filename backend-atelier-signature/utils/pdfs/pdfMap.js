@@ -1,5 +1,5 @@
 export const PDF_MAP = {
-  1: "/pdf/pdfBodySculptDuo.pdf",
-  2: "/pdf/pdfDermaSkinGlow.pdf",
-  3: "/pdf/pdfVacuoLift.pdf",
+  1: "pdfBodySculptDuo.pdf",
+  2: "pdfDermaSkinGlow.pdf",
+  3: "pdfVacuoLift.pdf",
 };
