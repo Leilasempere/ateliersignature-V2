@@ -67,7 +67,7 @@ export const createCheckoutSession = async (req, res) => {
 // 2️⃣ Mappage formations → PDFs
 // ----------------------
 const PDF_MAP = {
-  1: "pdfBodysculptDuo.pdf",
+  1: "pdfBodySculptDuo.pdf",
   2: "pdfDermaSkinGlow.pdf",
   3: "pdfVacuoLift.pdf",
 };
