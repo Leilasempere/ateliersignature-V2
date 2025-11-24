@@ -96,19 +96,14 @@ export const paymentSuccess = async (req, res) => {
 
     // 📧 Envoi email via Brevo
     await sendMail({
-      to: email,
-      subject: "Votre formation - Atelier Signature",
-      html: `
-        <h2>Merci pour votre achat 💖</h2>
-        <p>Vous trouverez votre formation en pièce jointe.</p>
-      `,
-      attachments: [
-        {
-          filename: pdfFile,
-          path: filePath,
-        },
-      ],
-    });
+  to: email,
+  subject: "Votre formation - Atelier Signature",
+  html: `
+    <h2>Merci pour votre achat 💖</h2>
+    <p>Vous trouverez votre formation en pièce jointe.</p>
+  `,
+  attachmentsPaths: [filePath],
+});
 
     return res.json({ success: true, message: "Email envoyé avec succès" });
 

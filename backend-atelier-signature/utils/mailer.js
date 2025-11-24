@@ -1,31 +1,39 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+import axios from "axios";
+import fs from "fs";
+import path from "path";
 
-dotenv.config();
-
-export const sendMail = async ({ to, subject, html, attachments = [] }) => {
+export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,     // smtp-relay.brevo.com
-      port: process.env.MAIL_PORT,     // 587
-      secure: false,                   // IMPORTANT pour 587 (TLS)
-      auth: {
-        user: process.env.MAIL_USER,   // Login SMTP Brevo
-        pass: process.env.MAIL_PASS,   // Password SMTP Brevo
+    // Convertir les fichiers en base64 pour Brevo
+    const attachments = attachmentsPaths.map((filePath) => {
+      const content = fs.readFileSync(filePath).toString("base64");
+      const name = path.basename(filePath);
+      return { name, content };
+    });
+
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: process.env.EMAIL_FROM_NAME,
+          email: process.env.EMAIL_FROM,
+        },
+        to: [{ email: to }],
+        subject,
+        htmlContent: html,
+        attachment: attachments,
       },
-    });
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    await transporter.sendMail({
-      from: `"${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM}>`,
-      to,
-      subject,
-      html,
-      attachments,
-    });
-
-    console.log("Email envoyé à :", to);
+    console.log("📨 Email envoyé via Brevo API à :", to);
   } catch (error) {
-    console.error("Erreur envoi email :", error);
+    console.error("Erreur envoi email via Brevo API :", error.response?.data || error.message);
     throw error;
   }
 };
