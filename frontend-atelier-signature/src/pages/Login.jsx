@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 
 export default function Login() {
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -13,31 +12,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [shouldRedirectToStripe, setShouldRedirectToStripe] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (shouldRedirectToStripe && user) {
-      redirectToStripe();
-    }
-  }, [shouldRedirectToStripe, user]);
-
-  const redirectToStripe = async () => {
-    try {
-      const { data } = await axios.post(
-        import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
-        {
-          formationId,
-          userId: user.id,
-        }
-      );
-
-      window.location.href = data.url;
-    } catch (err) {
-      console.error(err);
-      setError("Impossible de rediriger vers le paiement.");
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,9 +25,9 @@ export default function Login() {
       return;
     }
 
+    // ⭐️ Après login, retour sur la fiche formation
     if (redirect === "buy" && formationId) {
-      setShouldRedirectToStripe(true);
-      return;
+      return navigate(`/formations/${formationId}`);
     }
 
     navigate("/");
