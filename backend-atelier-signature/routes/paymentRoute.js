@@ -1,13 +1,12 @@
 import express from "express";
-
-import { createCheckoutSession, paymentSuccess } from "../controllers/paymentController.js";
+import { createCheckoutSession, stripeWebhook } from "../controllers/paymentController.js";
 
 const router = express.Router();
 
+// ⚠️ Stripe Webhook → nécessite RAW body
+router.post("/webhook", express.raw({ type: "application/json" }), stripeWebhook);
 
-
-// Session checkout
+// Création de session Stripe (Checkout)
 router.post("/create-checkout-session", createCheckoutSession);
-router.post("/success", paymentSuccess);
 
 export default router;

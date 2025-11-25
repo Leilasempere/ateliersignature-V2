@@ -1,27 +1,37 @@
 import Stripe from "stripe";
 import dotenv from "dotenv";
-import { Formation } from "../models/formationModel.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { sendMail } from "../utils/mailer.js";
+import { Formation } from "../models/formationModel.js";
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// -------------------------
+// PDF mapping
+// -------------------------
+const PDF_MAP = {
+  1: "pdfBodySculptDuo.pdf",
+  2: "pdfDermaSkinGlow.pdf",
+  3: "pdfVacuoLift.pdf",
+};
 
-// Création session Stripe
-
+// -------------------------
+// 1️⃣ Créer une session Stripe
+// -------------------------
 export const createCheckoutSession = async (req, res) => {
   try {
     const { formationId, userId } = req.body;
 
     if (!formationId || !userId) {
-      return res.status(400).json({ message: "formationId et userId requis." });
+      return res.status(400).json({ message: "formationId & userId requis" });
     }
 
     const formation = await Formation.findById(formationId);
-    if (!formation) return res.status(404).json({ message: "Formation introuvable." });
+    if (!formation) return res.status(404).json({ message: "Formation introuvable" });
 
+    // Création session Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -40,60 +50,66 @@ export const createCheckoutSession = async (req, res) => {
       mode: "payment",
       success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.FRONTEND_URL}/cancel`,
-      metadata: { userId, formationId }
+
+      // 📌 Très important : metadata !
+      metadata: {
+        userId,
+        formationId,
+      },
     });
 
-    res.json({ url: session.url });
-
+    return res.json({ url: session.url });
   } catch (error) {
-    console.error("Erreur Stripe :", error);
-    res.status(500).json({ message: "Erreur Stripe", error: error.message });
+    console.error("❌ Erreur Stripe session:", error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
+// -------------------------
+// 2️⃣ Webhook Stripe : déclenché AUTOMATIQUEMENT après paiement
+// -------------------------
+export const stripeWebhook = async (req, res) => {
+  const sig = req.headers["stripe-signature"];
 
-// Mappage formations → PDFs
+  let event;
 
-const PDF_MAP = {
-  1: "pdfBodySculptDuo.pdf",
-  2: "pdfDermaSkinGlow.pdf",
-  3: "pdfVacuoLift.pdf",
-};
-
-// Envoi email après paiement
-
-export const paymentSuccess = async (req, res) => {
   try {
-    const { email, formationId } = req.body;
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error("❌ Webhook signature error:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
 
-    if (!email || !formationId)
-      return res.status(400).json({ error: "Email ou formationId manquant" });
+  // 🎉 Paiement réussi
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
 
-    const pdfName = PDF_MAP[formationId];
-    if (!pdfName) return res.status(400).json({ error: "PDF introuvable" });
+    const email = session.customer_details.email;
+    const formationId = session.metadata.formationId;
 
-    // Chemin correct du PDF généré
+    console.log("🎉 Paiement validé pour :", email, "formation:", formationId);
+
+    const pdfFile = PDF_MAP[formationId];
+
+    // Chemin du pdf
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    const filePath = path.join(__dirname, "..", "utils", "pdfs", "generated", pdfName);
+    const filePath = path.join(__dirname, "..", "utils", "pdfs", "generated", pdfFile);
 
-    console.log("📄 PDF utilisé :", filePath);
-
-    // Envoi
+    // Envoi email
     await sendMail({
       to: email,
-      subject: "Votre formation - Atelier Signature",
-      html: `
-        <h2>Merci pour votre achat </h2>
-        <p>Voici votre formation téléchargeable en PDF.</p>
-      `,
+      subject: "Votre formation Atelier Signature",
+      html: `<h2>Merci pour votre achat 💖</h2><p>Votre PDF est en pièce jointe.</p>`,
       attachmentsPaths: [filePath],
     });
 
-    return res.json({ success: true });
-
-  } catch (err) {
-    console.error("Erreur paiement :", err);
-    res.status(500).json({ error: "Erreur envoi email" });
+    console.log("📨 Email envoyé !");
   }
+
+  res.status(200).send("OK");
 };
