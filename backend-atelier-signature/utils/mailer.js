@@ -7,8 +7,10 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
     // Convertir les fichiers en base64 pour Brevo
     const attachments = attachmentsPaths.map((filePath) => {
       const content = fs.readFileSync(filePath).toString("base64");
-      const name = path.basename(filePath);
-      return { name, content };
+      return { 
+        name: path.basename(filePath), 
+        content 
+      };
     });
 
     await axios.post(
@@ -16,12 +18,12 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
       {
         sender: {
           name: process.env.EMAIL_FROM_NAME,
-          email: process.env.EMAIL_FROM,
+          email: process.env.EMAIL_FROM
         },
         to: [{ email: to }],
         subject,
         htmlContent: html,
-        attachment: attachments,
+        attachment: attachments
       },
       {
         headers: {
@@ -31,9 +33,9 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
       }
     );
 
-    console.log("📨 Email envoyé via Brevo API à :", to);
+    console.log("Email envoyé via Brevo API à :", to);
   } catch (error) {
-    console.error("Erreur envoi email via Brevo API :", error.response?.data || error.message);
+    console.error("Erreur envoi email via Brevo :", error.response?.data || error.message);
     throw error;
   }
 };
