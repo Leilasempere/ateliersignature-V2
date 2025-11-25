@@ -9,18 +9,37 @@ export default function Success() {
   const sessionId = params.get("session_id");
 
   useEffect(() => {
+    console.log("SUCCESS PAGE LOADED");
+    console.log("sessionId =", sessionId);
+    console.log("user =", user);
+
+    if (!sessionId || !user) {
+      console.log("STOP : conditions pas remplies");
+      return;
+    }
+
+    console.log("Envoi email…");
+
     const sendEmail = async () => {
-      if (!sessionId || !user) return;
-
       const formationId = localStorage.getItem("lastFormationId");
-      if (!formationId) return;
+      if (!formationId) {
+        console.log("❌ formationId introuvable dans localStorage");
+        return;
+      }
 
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/success`, {
-        email: user.email,
-        formationId: Number(formationId),
-      });
-
-      localStorage.removeItem("lastFormationId");
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/payment/success`,
+          {
+            email: user.email,
+            formationId: Number(formationId),
+          }
+        );
+        console.log("Réponse backend :", res.data);
+        localStorage.removeItem("lastFormationId");
+      } catch (err) {
+        console.error("Erreur axios :", err.response?.data || err.message);
+      }
     };
 
     sendEmail();
