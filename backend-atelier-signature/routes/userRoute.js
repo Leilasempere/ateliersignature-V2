@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login } from "../controllers/userController.js";
+import { register, login, verifyEmail } from "../controllers/userController.js";
 import { verifyToken } from "../middlewares/auth.js";
 import pool  from "../config/db.js";
 import jwt from "jsonwebtoken";
@@ -55,6 +55,10 @@ router.get("/verify", async (req, res) => {
 
 //  Route de connexion
 router.post("/login", login);
+
+// Route de vérification d'email
+router.get("/verify", verifyEmail);
+
 
 //  Exemple de route protégée
 router.get("/profile", verifyToken, (req, res) => {
