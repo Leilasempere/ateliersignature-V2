@@ -1,7 +1,6 @@
 import express from "express";
 
 import { createCheckoutSession, paymentSuccess } from "../controllers/paymentController.js";
-import bodyParser from "body-parser";
 
 const router = express.Router();
 
