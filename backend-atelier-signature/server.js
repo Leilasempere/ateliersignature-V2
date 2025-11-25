@@ -22,7 +22,7 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(helmetMiddleware);
 
-app.use("/api/payment", paymentRoutes);
+app.use("/api/payments", paymentRoutes);
 app.use("/api/users", loginLimiter, userRoutes);
 
 app.use(globalLimiter);
