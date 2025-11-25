@@ -1,48 +1,30 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { useSearchParams } from "react-router-dom";
 
 export default function Success() {
   const { user } = useAuth();
+  const [params] = useSearchParams();
+  const sessionId = params.get("session_id");
 
   useEffect(() => {
     const sendEmail = async () => {
-      try {
-        const formationId = localStorage.getItem("lastFormationId");
-        const email = user?.email;
+      if (!sessionId || !user) return;
 
-        console.log("🔍 FRONT — Vérification :", { formationId, email });
+      const formationId = localStorage.getItem("lastFormationId");
+      if (!formationId) return;
 
-        if (!formationId) {
-          console.log("⛔ Pas de formationId trouvé");
-          return;
-        }
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/success`, {
+        email: user.email,
+        formationId: Number(formationId),
+      });
 
-        if (!email) {
-          console.log("⛔ Pas d'email user — attente 1 seconde…");
-          setTimeout(sendEmail, 1000);
-          return;
-        }
-
-        const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/payments/success`,
-          {
-            email,
-            formationId: Number(formationId),
-          }
-        );
-
-        console.log("📨 Email envoyé depuis le FRONT :", res.data);
-
-        localStorage.removeItem("lastFormationId");
-
-      } catch (error) {
-        console.error("❌ Erreur envoi email depuis success :", error);
-      }
+      localStorage.removeItem("lastFormationId");
     };
 
     sendEmail();
-  }, [user]);
+  }, [sessionId, user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
