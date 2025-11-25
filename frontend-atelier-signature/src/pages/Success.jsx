@@ -13,19 +13,21 @@ export default function Success() {
     console.log("sessionId =", sessionId);
     console.log("user =", user);
 
-    if (!sessionId || !user) {
-      console.log("STOP : conditions pas remplies");
-      return;
-    }
-
-    console.log("Envoi email…");
-
     const sendEmail = async () => {
-      const formationId = localStorage.getItem("lastFormationId");
-      if (!formationId) {
-        console.log("❌ formationId introuvable dans localStorage");
+      if (!sessionId || !user) {
+        console.log("STOP : conditions pas remplies");
         return;
       }
+
+      const formationId = localStorage.getItem("lastFormationId");
+      console.log("formationId trouvé =", formationId);
+
+      if (!formationId) {
+        console.log("AUCUN formationId dans localStorage");
+        return;
+      }
+
+      console.log("Envoi email…");
 
       try {
         const res = await axios.post(
@@ -35,10 +37,13 @@ export default function Success() {
             formationId: Number(formationId),
           }
         );
+
         console.log("Réponse backend :", res.data);
+
+        // On nettoie seulement APRÈS envoi email
         localStorage.removeItem("lastFormationId");
       } catch (err) {
-        console.error("Erreur axios :", err.response?.data || err.message);
+        console.log("ERREUR REQUÊTE :", err);
       }
     };
 
@@ -52,3 +57,4 @@ export default function Success() {
     </div>
   );
 }
+
