@@ -11,7 +11,7 @@ export default function BuyButton({ formation }) {
 
     try {
       const { data } = await axios.post(
-        import.meta.env.VITE_API_URL + "/api/payment/create-checkout-session",
+        import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
         {
           formationId: formation.id,
           userId: user.id,
