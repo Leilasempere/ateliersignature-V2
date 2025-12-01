@@ -10,17 +10,17 @@ dotenv.config();
 export const register = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword, role } = req.body;
 
-  console.log("🔔 [REGISTER] Reçu une inscription pour :", email);
+  console.log(" [REGISTER] Reçu une inscription pour :", email);
 
   try {
     if (password !== confirmPassword) {
-      console.log("❌ [REGISTER] MDP différents");
+      console.log(" [REGISTER] MDP différents");
       return res.status(400).json({ message: "Les mots de passe ne correspondent pas." });
     }
 
     const existing = await User.findByEmail(email);
     if (existing.length > 0) {
-      console.log("❌ [REGISTER] Email déjà utilisé :", email);
+      console.log(" [REGISTER] Email déjà utilisé :", email);
       return res.status(409).json({ message: "Email déjà utilisé." });
     }
 
@@ -35,7 +35,7 @@ export const register = async (req, res) => {
       isVerified: 0,
     });
 
-    console.log("✅ [REGISTER] Utilisateur créé en BDD, id =", userId);
+    console.log(" [REGISTER] Utilisateur créé en BDD, id =", userId);
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
       expiresIn: "24h",
@@ -43,8 +43,8 @@ export const register = async (req, res) => {
 
     const verificationLink = `${process.env.BACKEND_URL}/api/users/verify?token=${token}`;
 
-    console.log("📧 [REGISTER] Envoi mail de vérification à", email);
-    console.log("📧 [REGISTER] Lien de vérification:", verificationLink);
+    console.log(" [REGISTER] Envoi mail de vérification à", email);
+    console.log(" [REGISTER] Lien de vérification:", verificationLink);
 
     try {
       await sendMail({
@@ -68,9 +68,9 @@ export const register = async (req, res) => {
         `,
       });
 
-      console.log("✅ [REGISTER] Email de vérification envoyé à", email);
+      console.log("[REGISTER] Email de vérification envoyé à", email);
     } catch (mailError) {
-      console.error("❌ [REGISTER] Erreur d’envoi du mail de vérification :", mailError.response?.data || mailError.message);
+      console.error(" [REGISTER] Erreur d’envoi du mail de vérification :", mailError.response?.data || mailError.message);
     }
 
     res.status(201).json({
@@ -78,7 +78,7 @@ export const register = async (req, res) => {
       userId,
     });
   } catch (error) {
-    console.error("❌ [REGISTER] Erreur serveur :", error);
+    console.error("[REGISTER] Erreur serveur :", error);
     res.status(500).json({ message: "Erreur serveur.", error: error.message });
   }
 };

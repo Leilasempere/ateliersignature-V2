@@ -19,26 +19,26 @@ async function generateAll() {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    console.log("🔧 Génération des PDF en cours...");
+    console.log(" Génération des PDF en cours...");
 
     // Génération Body Sculpt Duo
     const file1 = path.join(outputDir, "pdfBodySculptDuo.pdf");
     await generateBodySculptDuoPDF(file1);
-    console.log("✅ pdfBodySculptDuo.pdf généré");
+    console.log("pdfBodySculptDuo.pdf généré");
 
     // Génération DermaSkinGlow
     const file2 = path.join(outputDir, "pdfDermaSkinGlow.pdf");
     await generateDermaSkinGlowPDF(file2);
-    console.log("✅ pdfDermaSkinGlow.pdf généré");
+    console.log("pdfDermaSkinGlow.pdf généré");
 
     // Génération VacuoLift
     const file3 = path.join(outputDir, "pdfVacuoLift.pdf");
     await generateVacuoLiftPDF(file3);
-    console.log("✅ pdfVacuoLift.pdf généré");
+    console.log("pdfVacuoLift.pdf généré");
 
-    console.log("\n🎉 Tous les PDF ont été générés avec succès !");
+    console.log("\nTous les PDF ont été générés avec succès !");
   } catch (error) {
-    console.error("❌ Erreur génération PDF :", error);
+    console.error("Erreur génération PDF :", error);
   }
 }
 
