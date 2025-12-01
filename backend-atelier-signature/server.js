@@ -10,6 +10,8 @@ import paymentRoutes from "./routes/paymentRoute.js";
 import { corsMiddleware } from "./middlewares/cors.js";
 import { helmetMiddleware } from "./middlewares/helmet.js";
 import { globalLimiter, loginLimiter } from "./middlewares/ratelimiter.js";
+import contactRoutes from "./routes/contactRoute.js";
+
 
 dotenv.config();
 const app = express();
@@ -29,6 +31,7 @@ app.use(globalLimiter);
 
 app.use("/api/formations", formationRoutes);
 app.use("/api/commandes", commandeRoutes);
+app.use("/api/contact", contactRoutes);
 
 (async () => {
   try {
