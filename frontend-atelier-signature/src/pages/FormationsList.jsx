@@ -6,6 +6,13 @@ export default function FormationsList() {
   const [formations, setFormations] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Images associées aux formations
+  const formationImages = {
+    1: "/public/assets/photoNB2.jpeg",
+    2: "/public/assets/photoNB2.jpeg",
+    3: "/public/assets/photoNB2.jpeg",
+  };
+
   useEffect(() => {
     getFormations()
       .then(setFormations)
@@ -21,22 +28,24 @@ export default function FormationsList() {
   return (
     <div>
 
-      {/* SECTION HERO PREMIUM */}
-      <section className="relative w-full h-[80vh] overflow-hidden">
+      
+      <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
+
         <img
-          src="/public/assets/photoFormation1.jpg"  
+          src="/assets/photoFormation1.jpg"
           alt="Soins esthétiques premium"
           className="w-full h-full object-cover opacity-90"
         />
 
-        {/* Dégradé luxe */}
+      
         <div className="absolute inset-0 bg-gradient-to-t from-[#F9F5F2] via-transparent to-transparent"></div>
 
-        {/* Texte au centre */}
+        
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
           <h1 className="text-5xl font-bold text-white drop-shadow-lg">
             Sublimez Votre Expertise
           </h1>
+          +
 
           <p className="text-lg text-white mt-4 drop-shadow-md">
             Formations premium – Technologies Esthétiques & Bien-être
@@ -51,27 +60,42 @@ export default function FormationsList() {
         </div>
       </section>
 
-      {/* SECTION LISTE DES FORMATIONS */}
+      
       <div id="formations" className="p-6 mt-10">
         <h2 className="text-3xl font-bold mb-8 text-center">
-          Nos Formations
+          "Devenez l'experte que tout le monde recherche."
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {formations.map((formation) => (
             <div
               key={formation.id}
-              className="border p-4 rounded-lg shadow-md bg-white"
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-100"
             >
-              <h3 className="text-xl font-bold mb-2">{formation.title}</h3>
-              <p className="text-gray-600 mb-4">{formation.description}</p>
+              
+              <img
+                src={formationImages[formation.id]}
+                alt={formation.title}
+                className="w-full h-48 object-cover"
+              />
 
-              <Link
-                to={`/formations/${formation.id}`}
-                className="bg-black text-white px-4 py-2 rounded-lg block text-center hover:bg-gray-800 transition"
-              >
-                Voir le détail
-              </Link>
+              
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-2">
+                  {formation.title}
+                </h3>
+
+                <p className="text-gray-600 mb-4">
+                  {formation.description}
+                </p>
+
+                <Link
+                  to={`/formations/${formation.id}`}
+                  className="bg-black text-white px-4 py-2 rounded-lg block text-center hover:bg-gray-800 transition"
+                >
+                  Voir le détail
+                </Link>
+              </div>
             </div>
           ))}
         </div>
