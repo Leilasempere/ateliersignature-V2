@@ -6,7 +6,7 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
   try {
     let attachments = [];
 
-    // Si des fichiers sont fournis, on les convertit
+  
     if (attachmentsPaths.length > 0) {
       attachments = attachmentsPaths.map((filePath) => ({
         name: path.basename(filePath),
@@ -14,7 +14,7 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
       }));
     }
 
-    // Construction du payload sans attachment si vide
+    
     const emailPayload = {
       sender: {
         name: process.env.EMAIL_FROM_NAME,

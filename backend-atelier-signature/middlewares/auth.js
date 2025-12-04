@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-//authentification JWT
+
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 

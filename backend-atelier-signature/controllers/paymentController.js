@@ -25,7 +25,7 @@ export const createCheckoutSession = async (req, res) => {
     const formation = await Formation.findById(formationId);
     if (!formation) return res.status(404).json({ message: "Formation introuvable" });
 
-    // Création session Stripe
+  
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -85,12 +85,12 @@ export const stripeWebhook = async (req, res) => {
 
     const pdfFile = PDF_MAP[formationId];
 
-    // Chemin du pdf
+  
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     const filePath = path.join(__dirname, "..", "utils", "pdfs", "generated", pdfFile);
 
-    // Envoi email
+    
     await sendMail({
       to: email,
       subject: "Votre formation Atelier Signature",

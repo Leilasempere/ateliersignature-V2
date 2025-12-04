@@ -53,7 +53,7 @@ export const register = async (req, res) => {
         html: `
           <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;
                       border:1px solid #eee;border-radius:10px;background:#fafafa;">
-            <h2 style="color:#111;">Bienvenue ${firstName} 💫</h2>
+            <h2 style="color:#111;">Bienvenue ${firstName} </h2>
             <p>Merci de vous être inscrite sur <b>L’Atelier Signature</b>.</p>
             <p>Pour activer votre compte, cliquez sur le bouton ci-dessous :</p>
             <p style="text-align:center;margin:30px 0;">
