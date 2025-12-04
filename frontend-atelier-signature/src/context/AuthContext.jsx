@@ -5,7 +5,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  // Charger depuis localStorage
+  
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");
@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
 
     if (!res.ok) return false;
 
-    return true; // Email de vérification envoyé
+    return true; 
   };
 
   const logout = () => {

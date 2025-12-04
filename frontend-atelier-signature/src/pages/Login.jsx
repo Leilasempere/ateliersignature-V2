@@ -25,7 +25,7 @@ export default function Login() {
       return;
     }
 
-    // ⭐️ Après login, retour sur la fiche formation
+  
     if (redirect === "buy" && formationId) {
       return navigate(`/formations/${formationId}`);
     }

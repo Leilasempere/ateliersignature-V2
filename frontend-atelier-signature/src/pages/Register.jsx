@@ -11,7 +11,7 @@ export default function Register() {
   const redirect = new URLSearchParams(location.search).get("redirect");
   const formationId = new URLSearchParams(location.search).get("formation");
 
-  // Nouveaux champs demandés par ton backend
+  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

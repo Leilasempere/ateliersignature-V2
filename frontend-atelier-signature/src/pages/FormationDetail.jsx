@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BuyButton from "../components/BuyButton"; 
-// Assure-toi que le chemin est correct
 
 export default function FormationDetail() {
   const { id } = useParams();
@@ -10,7 +9,7 @@ export default function FormationDetail() {
   const [formation, setFormation] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Charger la formation (page publique)
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/formations/${id}`)

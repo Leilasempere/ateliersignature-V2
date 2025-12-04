@@ -6,7 +6,7 @@ export default function FormationsList() {
   const [formations, setFormations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Images associées aux formations
+  
   const formationImages = {
     1: "/public/assets/photoNB2.jpeg",
     2: "/public/assets/photoNB2.jpeg",

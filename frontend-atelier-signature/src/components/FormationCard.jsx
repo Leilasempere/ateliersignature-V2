@@ -9,7 +9,7 @@ export default function FormationCard({ formation }) {
         {formation.description}
       </p>
 
-      {/* 👉 Bouton Voir les détails uniquement */}
+      
       <Link
         to={`/formation/${formation.id}`}
         className="block text-center bg-black text-white py-2 rounded hover:bg-gray-800 transition"
