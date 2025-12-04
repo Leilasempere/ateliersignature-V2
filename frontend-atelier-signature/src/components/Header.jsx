@@ -22,12 +22,33 @@ export default function Header() {
         className="flex items-center gap-8 text-gray-700"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
       >
+        {/* LIEN FORMATIONS */}
         <Link to="/formations" className="hover:text-black transition">
           Formations
         </Link>
 
-        
+        {/* LIEN INSTAGRAM */}
+        <a
+          href="https://www.instagram.com/studio64beautycorner?igsh=NXk2ZmxwaTJjY2hz&utm_source=qr"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:opacity-70 transition flex items-center"
+        >
+          <img
+            src="/assets/logo-instagram.png"
+            alt="Instagram"
+            className="w-5 h-5"
+          />
+        </a>
 
+        {/* DASHBOARD ADMIN (visible uniquement pour admin) */}
+        {user && user.role === "admin" && (
+          <Link to="/dashboard" className="hover:text-black transition">
+            Dashboard
+          </Link>
+        )}
+
+        {/* AUTH */}
         {!user && (
           <>
             <Link to="/login" className="hover:text-black transition">
