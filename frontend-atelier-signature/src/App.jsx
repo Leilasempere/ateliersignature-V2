@@ -8,6 +8,10 @@ import Cancel from "./pages/Cancel";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Dashboard from "./pages/Dashboard";
+import AdminFormations from "./pages/admin/AdminFormations";
+import AdminCommandes from "./pages/admin/AdminCommandes";
+import AdminUsers from "./pages/admin/AdminUsers";
+
 
 
 import Register from "./pages/Register";
@@ -27,6 +31,9 @@ export default function App() {
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} /> 
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/formations" element={<AdminFormations />} />
+          <Route path="/dashboard/commandes" element={<AdminCommandes />} />
+          <Route path="/dashboard/utilisateurs" element={<AdminUsers />} />
         </Routes>
         <Footer />
       </Router>
