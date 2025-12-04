@@ -1,18 +1,41 @@
-import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const redirect = new URLSearchParams(location.search).get("redirect");
-  const formationId = new URLSearchParams(location.search).get("formation");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [shouldRedirectToStripe, setShouldRedirectToStripe] = useState(false);
+
+  useEffect(() => {
+    const lastFormationId = localStorage.getItem("lastFormationId");
+
+    if (user && shouldRedirectToStripe && lastFormationId) {
+      redirectToStripe(lastFormationId);
+    }
+  }, [user, shouldRedirectToStripe]);
+
+  const redirectToStripe = async (formationId) => {
+    try {
+      const { data } = await axios.post(
+        import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
+        {
+          formationId: Number(formationId),
+          userId: user.id,
+        }
+      );
+
+      window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
+      setError("Impossible de rediriger vers le paiement.");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,12 +48,7 @@ export default function Login() {
       return;
     }
 
-  
-    if (redirect === "buy" && formationId) {
-      return navigate(`/formations/${formationId}`);
-    }
-
-    navigate("/");
+    setShouldRedirectToStripe(true);
   };
 
   return (
@@ -67,10 +85,7 @@ export default function Login() {
 
         <p className="text-center mt-4 text-gray-600">
           Pas de compte ?{" "}
-          <Link
-            to={`/register?redirect=${redirect}&formation=${formationId}`}
-            className="text-black underline"
-          >
+          <Link to="/register" className="text-black underline">
             Créer un compte
           </Link>
         </p>

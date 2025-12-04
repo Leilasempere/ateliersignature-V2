@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import BuyButton from "../components/BuyButton"; 
+import BuyButton from "../components/BuyButton";
 
 export default function FormationDetail() {
   const { id } = useParams();
 
   const [formation, setFormation] = useState(null);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     axios
@@ -18,25 +17,72 @@ export default function FormationDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p>Chargement...</p>;
-  if (!formation) return <p>Formation introuvable.</p>;
+  if (loading)
+    return (
+      <p className="text-center mt-10 text-gray-500">Chargement...</p>
+    );
+
+  if (!formation)
+    return (
+      <p className="text-center mt-10 text-red-500">
+        Formation introuvable.
+      </p>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">{formation.title}</h1>
+    <div className="min-h-screen bg-[#F9F5F2] py-16 px-6 flex justify-center">
+      <div className="max-w-4xl bg-white shadow-xl rounded-2xl p-10 border border-gray-200">
 
-      <p className="text-gray-700 mb-6">{formation.description}</p>
+        {/* TITRE */}
+        <h1
+          className="text-4xl font-light mb-4 text-center tracking-wide"
+          style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        >
+          {formation.title}
+        </h1>
 
-      <p className="text-xl font-semibold mb-6">
-        Prix : {formation.price} €
-      </p>
+        {/* IMAGE DU HERO SI DISPONIBLE */}
+        {formation.image && (
+          <img
+            src={formation.image}
+            alt={formation.title}
+            className="w-full h-64 object-cover rounded-xl mb-8 shadow"
+          />
+        )}
 
-      <div
-  className="mt-6 leading-relaxed text-gray-700 whitespace-pre-line"
-  dangerouslySetInnerHTML={{ __html: formation.detailed_formation }}
-     ></div>
+        {/* DESCRIPTION */}
+        <p
+          className="text-gray-700 text-lg leading-relaxed mb-8 text-center"
+          style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        >
+          {formation.description}
+        </p>
 
-      <BuyButton formation={formation} />
+        {/* PRIX */}
+        <div className="flex justify-center mb-10">
+          <p
+            className="text-3xl font-semibold text-[#8B6C58]"
+            style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+          >
+            {formation.price} €
+          </p>
+        </div>
+
+        {/* CONTENU DÉTAILLÉ — FORMATÉ AVEC HTML */}
+        <div
+          className="text-gray-700 text-base leading-relaxed whitespace-pre-line mb-10 prose prose-neutral max-w-none"
+          dangerouslySetInnerHTML={{
+            __html: formation.detailed_formation,
+          }}
+          style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        ></div>
+
+        {/* BOUTON ACHETER */}
+        <div className="flex justify-center">
+          <BuyButton formation={formation} />
+        </div>
+      </div>
     </div>
   );
 }
+

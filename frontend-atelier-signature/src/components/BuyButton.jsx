@@ -7,8 +7,15 @@ export default function BuyButton({ formation }) {
   const navigate = useNavigate();
 
   const handleBuy = async () => {
-    if (!user) return navigate(`/login`);
+    
+    localStorage.setItem("lastFormationId", formation.id);
 
+    
+    if (!user) {
+      return navigate("/login");
+    }
+
+    
     try {
       const { data } = await axios.post(
         import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",

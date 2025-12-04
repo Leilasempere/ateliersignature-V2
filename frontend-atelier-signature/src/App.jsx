@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 import FormationsList from "./pages/FormationsList";
 import FormationDetail from "./pages/FormationDetail";
 import { AuthProvider } from "./context/AuthContext";
@@ -16,7 +17,8 @@ export default function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<FormationsList />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/formations" element={<FormationsList />} />
           <Route path="/formations/:id" element={<FormationDetail />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

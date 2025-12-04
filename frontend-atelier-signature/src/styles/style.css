@@ -1,0 +1,11 @@
+.bg-animated {
+  background: radial-gradient(circle at 0% 0%, #fdf7f0 0, #f7ecdf 28%, #f3e1cf 48%, #f8efe4 75%, #fdf8f2 100%);
+  background-size: 200% 200%;
+  animation: bgMove 18s ease-in-out infinite;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

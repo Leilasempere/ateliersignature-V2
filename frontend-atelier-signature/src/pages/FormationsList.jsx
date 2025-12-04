@@ -8,9 +8,9 @@ export default function FormationsList() {
 
   
   const formationImages = {
-    1: "/public/assets/photoNB2.jpeg",
-    2: "/public/assets/photoNB2.jpeg",
-    3: "/public/assets/photoNB2.jpeg",
+    1: "/public/assets/LatelierSignaturelogo.png",
+    2: "/public/assets/LatelierSignaturelogo.png",
+    3: "/public/assets/LatelierSignaturelogo.png",
   };
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function FormationsList() {
       <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
 
         <img
-          src="/assets/photoFormation1.jpg"
+          src="/assets/visagepageaccueil.jpg"
           alt="Soins esthétiques premium"
           className="w-full h-full object-cover opacity-90"
         />

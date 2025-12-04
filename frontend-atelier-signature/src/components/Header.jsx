@@ -7,14 +7,14 @@ export default function Header() {
   return (
     <header className="bg-white text-black py-5 px-8 flex justify-between items-center shadow-sm border-b border-gray-100">
 
-      
+      {/* LOGO TEXTE PREMIUM */}
       <Link to="/" className="select-none">
-        <h1
-          className="text-3xl font-light tracking-wide"
+        <p
+          className="uppercase tracking-[0.3em] text-sm"
           style={{ fontFamily: "Helvetica Neue, sans-serif", color: "#111111" }}
         >
-          L’Atelier Signature
-        </h1>
+          L’ATELIER SIGNATURE
+        </p>
       </Link>
 
       {/* NAVIGATION */}
@@ -22,27 +22,20 @@ export default function Header() {
         className="flex items-center gap-8 text-gray-700"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
       >
-        <Link to="/" className="hover:text-black transition">Formations</Link>
+        <Link to="/formations" className="hover:text-black transition">
+          Formations
+        </Link>
 
-        {/* Instagram */}
-        <a
-          href="https://www.instagram.com/studio64beautycorner?igsh=NXk2ZmxwaTJjY2hz&utm_source=qr"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-70 transition flex items-center"
-        >
-          <img
-            src="/public/assets/logo-instagram.png"
-            alt="Instagram"
-            className="w-6 h-6"
-          />
-        </a>
+        
 
-        {/* Auth */}
         {!user && (
           <>
-            <Link to="/login" className="hover:text-black transition">Connexion</Link>
-            <Link to="/register" className="hover:text-black transition">Inscription</Link>
+            <Link to="/login" className="hover:text-black transition">
+              Connexion
+            </Link>
+            <Link to="/register" className="hover:text-black transition">
+              Inscription
+            </Link>
           </>
         )}
 
