@@ -36,7 +36,7 @@ export default function Home() {
           <div className="relative">
             <div className="rounded-3xl overflow-hidden shadow-xl border border-[#E6D5C5]">
               <img
-                src="/public/assets/visagepageaccueil.jpg"
+                src="/assets/visagepageaccueil.jpg"
                 alt="Formation Esthétique"
                 className="w-full h-full object-cover"
               />
