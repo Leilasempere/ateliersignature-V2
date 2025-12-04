@@ -12,6 +12,9 @@ import { helmetMiddleware } from "./middlewares/helmet.js";
 import { globalLimiter, loginLimiter } from "./middlewares/ratelimiter.js";
 import contactRoutes from "./routes/contactRoute.js";
 
+import adminRoutes from "./routes/adminRoute.js";
+
+
 
 dotenv.config();
 const app = express();
@@ -26,12 +29,16 @@ app.use(helmetMiddleware);
 
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", loginLimiter, userRoutes);
+app.use("/api/admin", adminRoutes);
+
 
 app.use(globalLimiter);
 
 app.use("/api/formations", formationRoutes);
 app.use("/api/commandes", commandeRoutes);
 app.use("/api/contact", contactRoutes);
+
+
 
 (async () => {
   try {
