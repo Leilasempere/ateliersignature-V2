@@ -1,9 +1,10 @@
 import express from "express";
-import { getOrders } from "../controllers/adminController.js";
-import { verifyToken, verifyAdmin } from "../middlewares/authMiddleware.js";
+import { adminLogin, getAdminOrders } from "../controllers/adminController.js";
+import { verifyAdmin } from "../middleware/adminAuth.js";
 
 const router = express.Router();
 
-router.get("/orders", verifyToken, verifyAdmin, getOrders);
+router.post("/login", adminLogin);
+router.get("/orders", verifyAdmin, getAdminOrders);
 
 export default router;
