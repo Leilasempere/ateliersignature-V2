@@ -5,16 +5,17 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  
+  // 🔄 Charger user depuis sessionStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
+    const storedUser = sessionStorage.getItem("user");
+    const storedToken = sessionStorage.getItem("token");
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
+  // 🔐 Connexion
   const login = async (email, password) => {
     const res = await fetch(import.meta.env.VITE_API_URL + "/api/users/login", {
       method: "POST",
@@ -35,12 +36,15 @@ export function AuthProvider({ children }) {
     };
 
     setUser(cleanedUser);
-    localStorage.setItem("user", JSON.stringify(cleanedUser));
-    localStorage.setItem("token", data.token);
+
+    // ✅ STOCKAGE TEMPORAIRE : se supprime automatiquement quand on ferme l’onglet
+    sessionStorage.setItem("user", JSON.stringify(cleanedUser));
+    sessionStorage.setItem("token", data.token);
 
     return true;
   };
 
+  // 📝 Inscription
   const register = async (firstName, lastName, email, password, confirmPassword) => {
     const res = await fetch(import.meta.env.VITE_API_URL + "/api/users/register", {
       method: "POST",
@@ -54,15 +58,14 @@ export function AuthProvider({ children }) {
       })
     });
 
-    if (!res.ok) return false;
-
-    return true; 
+    return res.ok;
   };
 
+  // 🚪 Déconnexion
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("token");
   };
 
   return (

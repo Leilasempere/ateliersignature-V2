@@ -92,12 +92,7 @@ export default function FormationsList() {
                   {formation.title}
                 </h3>
 
-                <p
-                  className="text-gray-600 mb-4 text-sm leading-relaxed"
-                  style={{ fontFamily: "Helvetica Neue, sans-serif" }}
-                >
-                  {formation.description}
-                </p>
+                <p className="hidden">{formation.description}</p>
 
                 <p className="text-lg font-semibold text-[#8B6C58] mb-4">
                   {formation.price} €

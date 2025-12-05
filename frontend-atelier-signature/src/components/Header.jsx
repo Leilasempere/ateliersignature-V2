@@ -41,13 +41,7 @@ export default function Header() {
           />
         </a>
 
-        {/* DASHBOARD ADMIN (visible uniquement pour admin) */}
-        {user && user.role === "admin" && (
-          <Link to="/dashboard" className="hover:text-black transition">
-            Dashboard
-          </Link>
-        )}
-
+        
         {/* AUTH */}
         {!user && (
           <>

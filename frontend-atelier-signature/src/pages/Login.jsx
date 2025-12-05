@@ -1,26 +1,29 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 
 export default function Login() {
   const { login, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Permet de savoir si on vient du bouton "Acheter"
+  const redirect = new URLSearchParams(location.search).get("redirect");
+  const formationId = new URLSearchParams(location.search).get("formation");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [shouldRedirectToStripe, setShouldRedirectToStripe] = useState(false);
 
+  // Redirection automatique vers Stripe si besoin
   useEffect(() => {
-    const lastFormationId = localStorage.getItem("lastFormationId");
-
-    if (user && shouldRedirectToStripe && lastFormationId) {
-      redirectToStripe(lastFormationId);
+    if (user && redirect === "buy" && formationId) {
+      goToStripe(formationId);
     }
-  }, [user, shouldRedirectToStripe]);
+  }, [user, redirect, formationId]);
 
-  const redirectToStripe = async (formationId) => {
+  const goToStripe = async (formationId) => {
     try {
       const { data } = await axios.post(
         import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
@@ -48,7 +51,14 @@ export default function Login() {
       return;
     }
 
-    setShouldRedirectToStripe(true);
+    // 🔥 Cas n°1 : l’utilisateur voulait acheter → direction Stripe
+    if (redirect === "buy" && formationId) {
+      goToStripe(formationId);
+      return;
+    }
+
+    // 🔥 Cas n°2 : connexion normale → direction formations
+    navigate("/formations");
   };
 
   return (
@@ -85,7 +95,10 @@ export default function Login() {
 
         <p className="text-center mt-4 text-gray-600">
           Pas de compte ?{" "}
-          <Link to="/register" className="text-black underline">
+          <Link
+            to={`/register?redirect=${redirect || ""}&formation=${formationId || ""}`}
+            className="text-black underline"
+          >
             Créer un compte
           </Link>
         </p>
