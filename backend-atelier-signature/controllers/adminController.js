@@ -1,11 +1,14 @@
 import pool from "../config/db.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
-  const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+  const [rows] = await pool.query(
+    "SELECT * FROM users WHERE email = ?",
+    [email]
+  );
 
   const admin = rows[0];
 
@@ -22,16 +25,4 @@ export const adminLogin = async (req, res) => {
   );
 
   res.json({ token });
-};
-
-export const getAdminOrders = async (req, res) => {
-  const [rows] = await pool.query(`
-    SELECT o.id, o.amount, o.created_at, u.email, f.title AS formation_title
-    FROM orders o
-    LEFT JOIN users u ON o.user_id = u.id
-    LEFT JOIN formations f ON o.formation_id = f.id
-    ORDER BY o.created_at DESC
-  `);
-
-  res.json(rows);
 };
