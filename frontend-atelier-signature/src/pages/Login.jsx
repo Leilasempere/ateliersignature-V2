@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 export default function Login() {
   const { login } = useAuth();
@@ -14,7 +15,6 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
-    // 🔐 Tentative de connexion
     const success = await login(email, password);
 
     if (!success) {
@@ -22,20 +22,34 @@ export default function Login() {
       return;
     }
 
-    // 📌 L'utilisateur est maintenant stocké en localStorage
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    // Vérifie si on a une formation à acheter
+    const formationId = localStorage.getItem("lastFormationId");
 
-    if (!storedUser) {
-      setError("Erreur interne : utilisateur introuvable.");
-      return;
+    if (formationId) {
+      // Redirection directe vers Stripe
+      try {
+        const { data } = await axios.post(
+          import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
+          {
+            formationId: Number(formationId),
+            userId: JSON.parse(localStorage.getItem("user")).id,
+          }
+        );
+
+        // Nettoie la mémoire
+        localStorage.removeItem("lastFormationId");
+
+        // Stripe
+        window.location.href = data.url;
+        return;
+      } catch (error) {
+        console.error(error);
+        setError("Erreur de redirection vers le paiement.");
+        return;
+      }
     }
 
-    // 🟣 SI ADMIN → REDIRECTION DASHBOARD
-    if (storedUser.role === "admin") {
-      return navigate("/admin/dashboard");
-    }
-
-    // 🟢 SINON → REDIRECTION PAGE FORMATIONS
+    // Sinon → connexion classique
     navigate("/formations");
   };
 
