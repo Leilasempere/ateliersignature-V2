@@ -6,13 +6,12 @@ import userRoutes from "./routes/userRoute.js";
 import formationRoutes from "./routes/formationRoute.js";
 import commandeRoutes from "./routes/commandeRoute.js";
 import paymentRoutes from "./routes/paymentRoute.js";
+import contactRoutes from "./routes/contactRoute.js";
+import adminRoute from "./routes/adminRoute.js";   // 🟢 IMPORT PLACÉ EN HAUT
 
 import { corsMiddleware } from "./middlewares/cors.js";
 import { helmetMiddleware } from "./middlewares/helmet.js";
-import { globalLimiter, loginLimiter } from "./middlewares/ratelimiter.js"; 
-import contactRoutes from "./routes/contactRoute.js";
-
-
+import { globalLimiter, loginLimiter } from "./middlewares/ratelimiter.js";
 
 dotenv.config();
 const app = express();
@@ -21,25 +20,25 @@ app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.set("trust proxy", 1);
 
 app.use(corsMiddleware);
-
 app.use(express.json());
 app.use(helmetMiddleware);
 
+// 🟣 ROUTES NON LIMITÉES
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", loginLimiter, userRoutes);
-import adminRoute from "./routes/adminRoute.js";
 
-
-
-
-app.use(globalLimiter);
+// 🟣 ROUTES ADMIN DOIVENT PASSER AVANT globalLimiter
 app.use("/api/admin", adminRoute);
+
+// 🛑 RATE LIMIT APRÈS LES ROUTES IMPORTANTES
+app.use(globalLimiter);
+
+// 🟢 AUTRES ROUTES
 app.use("/api/formations", formationRoutes);
 app.use("/api/commandes", commandeRoutes);
 app.use("/api/contact", contactRoutes);
 
-
-
+// TEST BDD
 (async () => {
   try {
     const connection = await pool.getConnection();
