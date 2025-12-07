@@ -1,49 +1,20 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 
 export default function Login() {
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // Permet de savoir si on vient du bouton "Acheter"
-  const redirect = new URLSearchParams(location.search).get("redirect");
-  const formationId = new URLSearchParams(location.search).get("formation");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Redirection automatique vers Stripe si besoin
-  useEffect(() => {
-    if (user && redirect === "buy" && formationId) {
-      goToStripe(formationId);
-    }
-  }, [user, redirect, formationId]);
-
-  const goToStripe = async (formationId) => {
-    try {
-      const { data } = await axios.post(
-        import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
-        {
-          formationId: Number(formationId),
-          userId: user.id,
-        }
-      );
-
-      window.location.href = data.url;
-    } catch (err) {
-      console.error(err);
-      setError("Impossible de rediriger vers le paiement.");
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    // 🔐 Tentative de connexion
     const success = await login(email, password);
 
     if (!success) {
@@ -51,13 +22,20 @@ export default function Login() {
       return;
     }
 
-    // 🔥 Cas n°1 : l’utilisateur voulait acheter → direction Stripe
-    if (redirect === "buy" && formationId) {
-      goToStripe(formationId);
+    // 📌 L'utilisateur est maintenant stocké en localStorage
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser) {
+      setError("Erreur interne : utilisateur introuvable.");
       return;
     }
 
-    // 🔥 Cas n°2 : connexion normale → direction formations
+    // 🟣 SI ADMIN → REDIRECTION DASHBOARD
+    if (storedUser.role === "admin") {
+      return navigate("/admin/dashboard");
+    }
+
+    // 🟢 SINON → REDIRECTION PAGE FORMATIONS
     navigate("/formations");
   };
 
@@ -95,10 +73,7 @@ export default function Login() {
 
         <p className="text-center mt-4 text-gray-600">
           Pas de compte ?{" "}
-          <Link
-            to={`/register?redirect=${redirect || ""}&formation=${formationId || ""}`}
-            className="text-black underline"
-          >
+          <Link to="/register" className="text-black underline">
             Créer un compte
           </Link>
         </p>

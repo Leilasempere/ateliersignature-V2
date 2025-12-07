@@ -9,7 +9,7 @@ export default function AdminLogin() {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -20,23 +20,23 @@ export default function AdminLogin() {
       );
 
       localStorage.setItem("adminToken", res.data.token);
+
       navigate("/admin/dashboard");
     } catch (err) {
-      setError("Identifiants administrateur incorrects");
+      setError("Identifiants administrateur incorrects.");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F9F5F2]">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-
         <h2 className="text-3xl font-light mb-6 text-center tracking-wide">
           Connexion Admin
         </h2>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
             placeholder="Email admin"
