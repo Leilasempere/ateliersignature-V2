@@ -9,12 +9,8 @@ import paymentRoutes from "./routes/paymentRoute.js";
 
 import { corsMiddleware } from "./middlewares/cors.js";
 import { helmetMiddleware } from "./middlewares/helmet.js";
-import { globalLimiter, loginLimiter } from "./middlewares/ratelimiter.js";
+import { globalLimiter, loginLimiter } from "./middlewares/ratelimiter.js"; 
 import contactRoutes from "./routes/contactRoute.js";
-import adminRoutes from "./routes/adminRoute.js";
-
-
-
 
 
 
@@ -31,11 +27,13 @@ app.use(helmetMiddleware);
 
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", loginLimiter, userRoutes);
-app.use("/api/admin", adminRoutes);
+import adminRoute from "./routes/adminRoute.js";
+
+
 
 
 app.use(globalLimiter);
-
+app.use("/api/admin", adminRoute);
 app.use("/api/formations", formationRoutes);
 app.use("/api/commandes", commandeRoutes);
 app.use("/api/contact", contactRoutes);
