@@ -103,10 +103,10 @@ export const stripeWebhook = async (req, res) => {
     //Enregistrer la commande dans la Base de Données
     try {
       await Order.create({
-        userId,
-        formationId,
-        amount: amountTotal,
-        stripeSessionId,
+    userId,
+    formationId,
+    stripeSessionId,
+    pdfFile,
       });
       console.log("Commande enregistrée en base de données");
     } catch (err) {
