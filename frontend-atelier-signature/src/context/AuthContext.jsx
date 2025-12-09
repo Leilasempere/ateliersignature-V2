@@ -5,7 +5,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  // 🔄 Charger user depuis sessionStorage
+  //Charger user depuis sessionStorage
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     const storedToken = sessionStorage.getItem("token");
@@ -33,14 +33,13 @@ export function AuthProvider({ children }) {
   };
 
   setUser(user);
-  localStorage.setItem("user", JSON.stringify(user));
-  localStorage.setItem("token", data.token);
+  sessionStorage.setItem("user", JSON.stringify(user));
+  sessionStorage.setItem("token", data.token);
 
-  return user; // 🔥 retourne le user complet
+  return user;
 };
 
-
-  // 📝 Inscription
+  
   const register = async (firstName, lastName, email, password, confirmPassword) => {
     const res = await fetch(import.meta.env.VITE_API_URL + "/api/users/register", {
       method: "POST",
@@ -57,7 +56,7 @@ export function AuthProvider({ children }) {
     return res.ok;
   };
 
-  // 🚪 Déconnexion
+
   const logout = () => {
     setUser(null);
     sessionStorage.removeItem("user");

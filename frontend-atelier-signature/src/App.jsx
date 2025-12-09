@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
-// Pages client
+// client
 import Home from "./pages/Home";
 import FormationsList from "./pages/FormationsList";
 import FormationDetail from "./pages/FormationDetail";
@@ -10,11 +10,11 @@ import Login from "./pages/Login";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
 
-// Pages admin
+//admin
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
-// Layout
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 

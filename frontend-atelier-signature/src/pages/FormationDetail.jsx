@@ -33,7 +33,7 @@ export default function FormationDetail() {
     <div className="min-h-screen bg-[#F9F5F2] py-16 px-6 flex justify-center">
       <div className="max-w-4xl bg-white shadow-xl rounded-2xl p-10 border border-gray-200">
 
-        {/* TITRE */}
+        
         <h1
           className="text-4xl font-light mb-4 text-center tracking-wide"
           style={{ fontFamily: "Helvetica Neue, sans-serif" }}
@@ -41,7 +41,7 @@ export default function FormationDetail() {
           {formation.title}
         </h1>
 
-        {/* IMAGE DU HERO SI DISPONIBLE */}
+      
         {formation.image && (
           <img
             src={formation.image}
@@ -50,7 +50,7 @@ export default function FormationDetail() {
           />
         )}
 
-        {/* DESCRIPTION */}
+        
         <p
           className="text-gray-700 text-lg leading-relaxed mb-8 text-center"
           style={{ fontFamily: "Helvetica Neue, sans-serif" }}
@@ -58,7 +58,7 @@ export default function FormationDetail() {
           {formation.description}
         </p>
 
-        {/* PRIX */}
+        
         <div className="flex justify-center mb-10">
           <p
             className="text-3xl font-semibold text-[#8B6C58]"
@@ -68,7 +68,7 @@ export default function FormationDetail() {
           </p>
         </div>
 
-        {/* CONTENU DÉTAILLÉ — FORMATÉ AVEC HTML */}
+      
         <div
           className="text-gray-700 text-base leading-relaxed whitespace-pre-line mb-10 prose prose-neutral max-w-none"
           dangerouslySetInnerHTML={{
@@ -77,7 +77,7 @@ export default function FormationDetail() {
           style={{ fontFamily: "Helvetica Neue, sans-serif" }}
         ></div>
 
-        {/* BOUTON ACHETER */}
+        
         <div className="flex justify-center">
           <BuyButton formation={formation} />
         </div>

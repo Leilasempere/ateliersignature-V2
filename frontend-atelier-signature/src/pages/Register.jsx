@@ -58,7 +58,7 @@ export default function Register() {
       return;
     }
 
-    // Ton backend demande une vérification email → pas de login automatique
+  
     alert("Compte créé ! Vérifiez votre boîte mail pour activer votre compte.");
 
     if (redirect === "buy" && formationId) {

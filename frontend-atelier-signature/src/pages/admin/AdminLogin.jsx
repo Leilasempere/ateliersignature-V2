@@ -1,6 +1,3 @@
-console.log("🔥 AdminLogin.jsx chargé !");
-
-
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +12,7 @@ export default function AdminLogin() {
     e.preventDefault();
     setError("");
 
-    console.log("📤 Tentative de connexion admin :", email);
+    console.log("Tentative de connexion admin :", email);
 
     try {
       const res = await axios.post(
@@ -23,17 +20,17 @@ export default function AdminLogin() {
         { email, password }
       );
 
-      console.log("📥 Réponse du serveur :", res.data);
+      console.log("Réponse du serveur :", res.data);
 
-      // Stockage Token
+      
       localStorage.setItem("token", res.data.token);
-      console.log("💾 Token stocké :", localStorage.getItem("token"));
+      console.log("Token stocké :", localStorage.getItem("token"));
 
-      console.log("➡️ Redirection vers /admin/dashboard …");
+      console.log("Redirection vers /admin/dashboard …");
       navigate("/admin/dashboard");
 
     } catch (err) {
-      console.error("❌ Erreur Admin Login :", err.response?.data || err);
+      console.error("Erreur Admin Login :", err.response?.data || err);
       setError("Identifiants incorrects");
     }
   };

@@ -9,7 +9,7 @@ export default function Success() {
         </p>
 
         <h1 className="text-3xl font-semibold text-[#111111]">
-          Paiement réussi ✨
+          Paiement réussi 
         </h1>
 
         <p className="text-gray-600 mt-4 leading-relaxed">

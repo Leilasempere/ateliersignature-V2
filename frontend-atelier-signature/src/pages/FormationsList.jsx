@@ -6,7 +6,7 @@ export default function FormationsList() {
   const [formations, setFormations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Images associées aux formations
+  
   const formationImages = {
     1: "/assets/photoFormation1.jpg",
     2: "/assets/photomassage.jpg",
@@ -28,7 +28,7 @@ export default function FormationsList() {
   return (
     <div className="bg-[#F9F5F2] min-h-screen pb-20">
 
-      {/* HERO SECTION */}
+    
       <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
 
         <img
@@ -61,7 +61,7 @@ export default function FormationsList() {
         </div>
       </section>
 
-      {/* LISTE DES FORMATIONS */}
+    
       <div id="formations" className="px-6 mt-16 max-w-7xl mx-auto">
         <h2
           className="text-center text-3xl md:text-4xl font-light mb-12"

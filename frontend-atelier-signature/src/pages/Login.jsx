@@ -15,41 +15,46 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
-    const success = await login(email, password);
+    const user = await login(email, password);
 
-    if (!success) {
+    if (!user) {
       setError("Identifiants incorrects.");
       return;
     }
 
-    // Vérifie si on a une formation à acheter
+    console.log("USER CONNECTÉ :", user);
+
+  
+    if (user.role === "admin") {
+      console.log("Redirection ADMIN");
+      return navigate("/admin/dashboard");
+    }
+
+  
     const formationId = localStorage.getItem("lastFormationId");
 
     if (formationId) {
-      // Redirection directe vers Stripe
       try {
         const { data } = await axios.post(
           import.meta.env.VITE_API_URL + "/api/payments/create-checkout-session",
           {
             formationId: Number(formationId),
-            userId: JSON.parse(localStorage.getItem("user")).id,
+            userId: user.id,
           }
         );
 
-        // Nettoie la mémoire
         localStorage.removeItem("lastFormationId");
 
-        // Stripe
         window.location.href = data.url;
         return;
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
         setError("Erreur de redirection vers le paiement.");
         return;
       }
     }
 
-    // Sinon → connexion classique
+  
     navigate("/formations");
   };
 
@@ -77,10 +82,7 @@ export default function Login() {
             className="w-full border p-3 rounded-lg"
           />
 
-          <button
-            type="submit"
-            className="w-full bg-black text-white p-3 rounded-lg"
-          >
+          <button className="w-full bg-black text-white p-3 rounded-lg">
             Se connecter
           </button>
         </form>

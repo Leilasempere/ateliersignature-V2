@@ -5,11 +5,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-animated text-[#111111]">
 
-      {/* HERO LUXE */}
+    
       <section className="relative overflow-hidden py-20 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
-          {/* Texte à gauche */}
+        
           <div>
             <p className="uppercase tracking-[0.3em] text-xs mb-4">L’ATELIER SIGNATURE</p>
 
@@ -32,7 +32,7 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Image */}
+        
           <div className="relative">
             <div className="rounded-3xl overflow-hidden shadow-xl border border-[#E6D5C5]">
               <img
@@ -47,7 +47,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
+    
       <section className="text-center py-10">
         <h2 className="text-2xl font-light mb-4">Prête à transformer votre expertise ?</h2>
         <Link
