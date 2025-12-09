@@ -1,6 +1,6 @@
 import { Commande } from "../models/commandeModel.js";
 
-// Créer une commande manuelle (utile pour test sans Stripe)
+// Créer une nouvelle commande
 export const createCommande = async (req, res) => {
   try {
     const { user_id, formation_id, stripe_payment_id } = req.body;

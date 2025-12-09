@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/register", register)
 router.get("/verify", async (req, res) => {
   const { token } = req.query;
-
+// Vérifie la présence du token
   if (!token) {
     return res.status(400).send("Lien de validation invalide (aucun token).");
   }
@@ -53,14 +53,14 @@ router.get("/verify", async (req, res) => {
   }
 });
 
-//  Route de connexion
+
 router.post("/login", login);
 
-// Route de vérification d'email
+
 router.get("/verify", verifyEmail);
 
 
-//  Exemple de route protégée
+
 router.get("/profile", verifyToken, (req, res) => {
   res.json({ message: "Profil utilisateur autorisé", user: req.user });
 });

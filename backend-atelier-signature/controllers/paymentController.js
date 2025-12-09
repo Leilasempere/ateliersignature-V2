@@ -16,6 +16,7 @@ const PDF_MAP = {
   3: "pdfVacuoLift.pdf",
 };
 
+// Créer une session de paiement Stripe
 export const createCheckoutSession = async (req, res) => {
   try {
     const { formationId, userId } = req.body;
@@ -61,6 +62,7 @@ export const createCheckoutSession = async (req, res) => {
   }
 };
 
+// Gérer les webhooks Notifications auto Stripe
 export const stripeWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
 
@@ -85,9 +87,9 @@ export const stripeWebhook = async (req, res) => {
     const amountTotal = session.amount_total / 100; // Stripe en cents
     const stripeSessionId = session.id;
 
-    console.log("✅ Paiement validé pour :", email, "formation:", formationId);
+    console.log("Paiement validé pour :", email, "formation:", formationId);
 
-    // 1️⃣ Récupérer l'utilisateur par email (s'il existe)
+    //Récupérer l'utilisateur par email 
     let userId = null;
     try {
       const existing = await User.findByEmail(email);
@@ -98,7 +100,7 @@ export const stripeWebhook = async (req, res) => {
       console.error("Erreur recherche user via email dans webhook:", err);
     }
 
-    // 2️⃣ Enregistrer la commande en BDD
+    //Enregistrer la commande dans la Base de Données
     try {
       await Order.create({
         userId,
@@ -106,12 +108,12 @@ export const stripeWebhook = async (req, res) => {
         amount: amountTotal,
         stripeSessionId,
       });
-      console.log("💾 Commande enregistrée en BDD");
+      console.log("Commande enregistrée en base de données");
     } catch (err) {
-      console.error("Erreur enregistrement commande BDD:", err);
+      console.error("Erreur enregistrement commande base de données:", err);
     }
 
-    // 3️⃣ Envoi du PDF (tu gardes ton code existant)
+    //Envoi du PDF par email
     const pdfFile = PDF_MAP[formationId];
 
     const __filename = fileURLToPath(import.meta.url);
@@ -129,10 +131,10 @@ export const stripeWebhook = async (req, res) => {
       await sendMail({
         to: email,
         subject: "Votre formation Atelier Signature",
-        html: `<h2>Merci pour votre achat 💖</h2><p>Votre PDF est en pièce jointe.</p>`,
+        html: `<h2>Merci pour votre achat !</h2><p>Votre PDF est en pièce jointe.</p><br/><p>Bon apprentissage !</p><br/><p>L'équipe Atelier Signature</p>`,
         attachmentsPaths: [filePath],
       });
-      console.log("📨 Email envoyé avec PDF");
+      console.log("Email envoyé avec PDF");
     } catch (err) {
       console.error("Erreur envoi mail via webhook:", err);
     }

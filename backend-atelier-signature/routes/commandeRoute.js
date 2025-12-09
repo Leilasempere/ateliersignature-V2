@@ -3,8 +3,8 @@ import { createCommande, getCommandes, getCommandeById } from "../controllers/co
 
 const router = express.Router();
 
-router.post("/", createCommande);      // Créer une commande
-router.get("/", getCommandes);         // Liste toutes les commandes
-router.get("/:id", getCommandeById);   // Détail d’une commande
+router.post("/", createCommande);      
+router.get("/", getCommandes);         // Lister
+router.get("/:id", getCommandeById);   // Détail 
 
 export default router;

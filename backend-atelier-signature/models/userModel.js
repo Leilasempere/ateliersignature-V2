@@ -1,21 +1,20 @@
 import pool from "../config/db.js";
 
 export class User {
-  // Trouver un utilisateur par email
   static async findByEmail(email) {
     try {
       const [rows] = await pool.query(
         "SELECT * FROM users WHERE email = ?",
         [email]
       );
-      return rows; // tableau (0 ou 1 élément)
+      return rows;
     } catch (error) {
       console.error("Erreur dans findByEmail:", error);
       throw error;
     }
   }
 
-  // Créer un nouvel utilisateur
+
   static async create({ firstName, lastName, email, password, role, isVerified = 0 }) {
     try {
       const [result] = await pool.query(
@@ -30,7 +29,6 @@ export class User {
     }
   }
 
-  // Trouver un utilisateur par ID
   static async findById(id) {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
@@ -41,14 +39,13 @@ export class User {
     }
   }
 
-  // Marquer un utilisateur comme vérifié
   static async verifyEmail(email) {
     try {
       const [result] = await pool.query(
         "UPDATE users SET isVerified = 1 WHERE email = ?",
         [email]
       );
-      return result.affectedRows > 0; // true si au moins 1 ligne modifiée
+      return result.affectedRows > 0; 
     } catch (error) {
       console.error("Erreur dans verifyEmail:", error);
       throw error;

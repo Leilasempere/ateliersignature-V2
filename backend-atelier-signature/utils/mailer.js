@@ -14,7 +14,7 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
       }));
     }
 
-    
+  
     const emailPayload = {
       sender: {
         name: process.env.EMAIL_FROM_NAME,
@@ -24,7 +24,6 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
       subject,
       htmlContent: html,
     };
-
     if (attachments.length > 0) {
       emailPayload.attachment = attachments;
     }
@@ -42,3 +41,5 @@ export const sendMail = async ({ to, subject, html, attachmentsPaths = [] }) => 
     throw error;
   }
 };
+
+

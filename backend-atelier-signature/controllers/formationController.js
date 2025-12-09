@@ -7,7 +7,7 @@ export const getAllFormations = async (req, res) => {
     res.status(200).json(formations);
   } catch (error) {
     res.status(500).json({
-      message: "Erreur serveur lors de la récupération des formations.",
+      message: "Erreur lors de la récupération des formations.",
       error: error.message,
     });
   }

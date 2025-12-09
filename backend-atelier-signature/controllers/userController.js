@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
+// Inscription utilisateur
 export const register = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword, role } = req.body;
 
@@ -35,7 +35,7 @@ export const register = async (req, res) => {
       isVerified: 0,
     });
 
-    console.log(" [REGISTER] Utilisateur créé en BDD, id =", userId);
+    console.log(" [REGISTER] Utilisateur créé en Base de données, id =", userId);
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
       expiresIn: "24h",
@@ -84,6 +84,7 @@ export const register = async (req, res) => {
 };
 
 
+// Connexion utilisateur
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -96,7 +97,7 @@ export const login = async (req, res) => {
 
     const user = existing[0];
 
-    // VÉRIFICATION EMAIL
+    
     if (user.isVerified === 0) {
       return res.status(403).json({ message: "Veuillez vérifier votre email avant de vous connecter." });
     }
@@ -136,12 +137,12 @@ export const verifyEmail = async (req, res) => {
   if (!token) return res.status(400).json({ message: "Token manquant." });
 
   try {
-    // Decode token
+    // Vérifier le token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const email = decoded.email;
 
-    // Active le compte
+    // Activer le compte
     await User.verifyEmail(email);
 
     return res.json({ message: "Compte vérifié avec succès !" });

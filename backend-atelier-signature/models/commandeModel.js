@@ -11,7 +11,7 @@ export const Commande = {
     return { id: result.insertId };
   },
 
-
+// Récupérer toutes les commandes avec détails utilisateur et formation
   findAll: async () => {
     const [rows] = await pool.execute(`
       SELECT 

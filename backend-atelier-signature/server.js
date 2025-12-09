@@ -23,22 +23,19 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(helmetMiddleware);
 
-// 🟣 ROUTES NON LIMITÉES
 app.use("/api/payments", paymentRoutes);
 app.use("/api/users", loginLimiter, userRoutes);
 
-// 🟣 ROUTES ADMIN DOIVENT PASSER AVANT globalLimiter
+
 app.use("/api/admin", adminRoute);
 
-// 🛑 RATE LIMIT APRÈS LES ROUTES IMPORTANTES
 app.use(globalLimiter);
 
-// 🟢 AUTRES ROUTES
+
 app.use("/api/formations", formationRoutes);
 app.use("/api/commandes", commandeRoutes);
 app.use("/api/contact", contactRoutes);
 
-// TEST BDD
 (async () => {
   try {
     const connection = await pool.getConnection();
