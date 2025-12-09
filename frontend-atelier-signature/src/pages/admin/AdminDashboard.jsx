@@ -4,29 +4,35 @@ import axios from "axios";
 export default function AdminDashboard() {
   const [orders, setOrders] = useState([]);
 
+  
   const token = localStorage.getItem("token");
+  console.log("Token dans localStorage :", token);
 
   useEffect(() => {
-    console.log("Token détecté :", token);
+    if (!token) {
+      console.error("Aucun token trouvé, impossible d'appeler l'API admin.");
+      return;
+    }
 
-    const load = async () => {
+    const loadOrders = async () => {
       try {
-        const res = await axios.get(
-          import.meta.env.VITE_API_URL + "/api/admin/orders",
-          {
-            headers: { Authorization: "Bearer " + token }
-          }
-        );
+        const url = import.meta.env.VITE_API_URL + "/api/admin/orders";
+        console.log("Appel API :", url);
+
+        const headers = { Authorization: `Bearer ${token}` };
+        console.log("Headers envoyés :", headers);
+
+        const res = await axios.get(url, { headers });
 
         console.log("Commandes reçues :", res.data);
         setOrders(res.data);
 
       } catch (err) {
-        console.error("Erreur chargement commandes :", err.response?.data || err);
+        console.error("Erreur API /admin/orders :", err.response?.data || err);
       }
     };
 
-    if (token) load();
+    loadOrders();
   }, [token]);
 
   return (
@@ -39,20 +45,17 @@ export default function AdminDashboard() {
             <th className="p-3">Date</th>
             <th className="p-3">Email</th>
             <th className="p-3">Formation</th>
-            <th className="p-3">Statut</th>
+            <th className="p-3">Montant</th>
           </tr>
         </thead>
 
         <tbody>
           {orders.map((o) => (
-            <tr key={o.id} className="border-t">
-              <td className="p-3">
-                {new Date(o.date_creation).toLocaleDateString("fr-FR")}
-              </td>
-
+            <tr key={o.id}>
+              <td className="p-3">{new Date(o.date_creation).toLocaleDateString("fr-FR")}</td>
               <td className="p-3">{o.user_email}</td>
               <td className="p-3">{o.formation_title}</td>
-              <td className="p-3">{o.status}</td>
+              <td className="p-3">{o.montant} €</td>
             </tr>
           ))}
         </tbody>
