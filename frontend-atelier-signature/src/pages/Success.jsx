@@ -14,7 +14,7 @@ export default function Success() {
 
         <p className="text-gray-600 mt-4 leading-relaxed">
           Merci pour votre confiance.  
-          Votre formation a été envoyée par email 📩
+          Votre formation a été envoyée par email 
         </p>
 
         <a
