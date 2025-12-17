@@ -26,7 +26,7 @@ export const Formation = {
   },
 
   
-  remove: async (id) => {
+  delete: async (id) => {
     const [result] = await pool.execute(`DELETE FROM formations WHERE id = ?`, [id]);
     return result.affectedRows > 0;
   },

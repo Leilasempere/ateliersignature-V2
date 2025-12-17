@@ -12,8 +12,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 0
+  enableKeepAlive: true, // activer le maintien de la connexion
+  keepAliveInitialDelay: 0 // délai initial avant d'envoyer un paquet de maintien en vie
 });
 
 export default pool;

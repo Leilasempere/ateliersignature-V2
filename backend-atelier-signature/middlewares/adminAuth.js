@@ -5,7 +5,7 @@ export default function adminAuth(req, res, next) {
 
   // Récupérer le token d'autorisation depuis les headers
   const authHeader = req.headers.authorization;
-  console.log("Authorization header :", authHeader);
+  console.log("Header d'autorisation :", authHeader);
 
   if (!authHeader)
     return res.status(401).json({ message: "Token manquant." });

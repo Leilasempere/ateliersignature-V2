@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { sendMail } from "../utils/mailer.js";
 import { Formation } from "../models/formationModel.js";
 import { User } from "../models/userModel.js";
-import { Order } from "../models/orderModel.js";
+
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -62,7 +62,7 @@ export const createCheckoutSession = async (req, res) => {
   }
 };
 
-// Gérer les webhooks Notifications auto Stripe
+// Gestion
 export const stripeWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
 
@@ -84,10 +84,11 @@ export const stripeWebhook = async (req, res) => {
 
     const email = session.customer_details.email;
     const formationId = session.metadata.formationId;
-    const amountTotal = session.amount_total / 100; // Stripe en cents
-    const stripeSessionId = session.id;
+    
 
     console.log("Paiement validé pour :", email, "formation:", formationId);
+
+    const pdfFile = PDF_MAP[formationId];
 
     //Récupérer l'utilisateur par email 
     let userId = null;
@@ -100,21 +101,11 @@ export const stripeWebhook = async (req, res) => {
       console.error("Erreur recherche user via email dans webhook:", err);
     }
 
-    //Enregistrer la commande dans la Base de Données
-    try {
-      await Order.create({
-    userId,
-    formationId,
-    stripeSessionId,
-    pdfFile,
-      });
-      console.log("Commande enregistrée en base de données");
-    } catch (err) {
-      console.error("Erreur enregistrement commande base de données:", err);
-    }
+   
+  
 
     //Envoi du PDF par email
-    const pdfFile = PDF_MAP[formationId];
+    
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);

@@ -7,7 +7,7 @@ import formationRoutes from "./routes/formationRoute.js";
 import commandeRoutes from "./routes/commandeRoute.js";
 import paymentRoutes from "./routes/paymentRoute.js";
 import contactRoutes from "./routes/contactRoute.js";
-import adminRoute from "./routes/adminRoute.js";   // 🟢 IMPORT PLACÉ EN HAUT
+import adminRoute from "./routes/adminRoute.js";   
 
 import { corsMiddleware } from "./middlewares/cors.js";
 import { helmetMiddleware } from "./middlewares/helmet.js";
@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 
 app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
-app.set("trust proxy", 1);
+app.set("trust proxy", 1); // pour utiliser les rate limiters derrière un proxy comme Render.com
 
 app.use(corsMiddleware);
 app.use(express.json());

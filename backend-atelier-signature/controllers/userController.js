@@ -137,12 +137,12 @@ export const verifyEmail = async (req, res) => {
   if (!token) return res.status(400).json({ message: "Token manquant." });
 
   try {
-    // Vérifier le token
+  
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const email = decoded.email;
 
-    // Activer le compte
+  
     await User.verifyEmail(email);
 
     return res.json({ message: "Compte vérifié avec succès !" });

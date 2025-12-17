@@ -6,7 +6,7 @@ import { generateBodySculptDuoPDF } from "./pdfBodySculptDuo.js";
 import { generateDermaSkinGlowPDF } from "./pdfDermaSkinGlow.js";
 import { generateVacuoLiftPDF } from "./pdfVacuoLift.js";
 
-// Récupération du bon __dirname en ES Modules
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
